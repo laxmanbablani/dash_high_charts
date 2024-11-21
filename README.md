@@ -1,9 +1,12 @@
 # Dash HighCharts
 
-Dash HighCharts is a Dash component library.
+Dash HighCharts is a Dash component library with HighChartsAPI and Javascript integration.
 
-HighCharts wrapper for Plotly Dash with ChartAPI and Javascript integration.
----
+Use getApiSync to get the Highcharts Chart object and call HighCharts methods.
+
+Functions can be written as a dictionary and passed to the component for event handling.
+
+
 
 Get started with:
 1. Install Dash and its dependencies: https://dash.plotly.com/installation
