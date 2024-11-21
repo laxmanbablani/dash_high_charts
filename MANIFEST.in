@@ -1,0 +1,11 @@
+include dash_high_charts/dash_high_charts.min.js
+include dash_high_charts/dash_high_charts.min.js.map
+include dash_high_charts/async-*.js
+include dash_high_charts/async-*.js.map
+include dash_high_charts/*-shared.js
+include dash_high_charts/*-shared.js.map
+include dash_high_charts/metadata.json
+include dash_high_charts/package-info.json
+include README.md
+include LICENSE
+include package.json

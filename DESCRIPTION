@@ -1,0 +1,13 @@
+Package: dashHighCharts
+Title: HighCharts wrapper for Plotly Dash
+Version: 0.0.1
+Description: HighCharts wrapper for Plotly Dash
+Depends: R (>= 3.0.2)
+Imports: 
+Suggests: 
+License: MIT + file LICENSE
+URL: https://github.com/github.com/laxmanbablani/dashhighcharts/dash-high-charts
+BugReports: https://github.com/github.com/laxmanbablani/dashhighcharts/dash-high-charts/issues
+Encoding: UTF-8
+LazyData: true
+KeepSource: true
