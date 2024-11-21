@@ -141,6 +141,10 @@ export default class HighChart extends Component {
         this.chartRef.current.chart.destroy();
     }
 
+    componentDidUpdate(prevProps, prevState, snapshot) {
+        this.chartRef.current.chart.redraw();
+    }
+
     render() {
         const {id, className, constructorType, options} = this.props;
         const convertedOptions = this.applyConvertFunction(options);
