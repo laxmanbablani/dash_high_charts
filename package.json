@@ -1,6 +1,6 @@
 {
   "name": "dash_high_charts",
-  "version": "0.0.1A",
+  "version": "0.0.1B",
   "description": "HighCharts wrapper for Plotly Dash",
   "repository": {
     "type": "git",
