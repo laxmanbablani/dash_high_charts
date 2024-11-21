@@ -13,6 +13,11 @@ gantt = {
         'min': today + 0.75 * day,
         'max': today + 1.1 * day,
     },
+    'chart': {
+        'events': {
+            'load': {'function': 'console.log("Chart loaded");'}
+        }
+    },
     'series': [{
         'name': 'Init M1, Import FIRT market data',
         'data': [{

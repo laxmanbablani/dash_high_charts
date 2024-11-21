@@ -1,3 +1,5 @@
 # AUTO GENERATED FILE - DO NOT EDIT
 
-export(''HighChart)
+export(HighChart)
+export(highChart)
+export(HighChart)

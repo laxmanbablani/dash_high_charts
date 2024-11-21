@@ -24,6 +24,9 @@
   "author": "Laxman Bablani <laxman@bablani.org>",
   "license": "MIT",
   "dependencies": {
+    "d3-time": "^3.1.0",
+    "d3-format": "^3.1.0",
+    "d3-time-format":"^4.1.0",
     "highcharts-react-official": "^3.2.1",
     "ramda": "^0.26.1"
   },

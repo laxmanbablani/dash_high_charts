@@ -1,8 +1,23 @@
 import React, {Component} from 'react';
 import HighchartsReact from 'highcharts-react-official';
 import PropTypes from 'prop-types';
-import {defaultProps as _defaultProps, propTypes as _propTypes, apiGetters   } from '../components/HighChart.react';
+import {defaultProps as _defaultProps, propTypes as _propTypes, apiGetters} from '../components/HighChart.react';
+import {memoizeWith} from 'ramda';
 
+// d3 imports
+import * as d3Format from 'd3-format';
+import * as d3Time from 'd3-time';
+import * as d3TimeFormat from 'd3-time-format';
+
+const d3 = {...d3Format, ...d3Time, ...d3TimeFormat};
+
+export const customFunctions = {
+    Math: Math, Number: Number, log: function() {
+        console.log('you are logging from an AG grid function', ...arguments);
+    },
+};
+
+const dash_clientside = window.dash_clientside || {};
 const highChartsRefs = {};
 apiGetters.getApi = (id) => highChartsRefs[stringifyId(id)]?.chart;
 
@@ -56,6 +71,49 @@ export default class HighChart extends Component {
         this.chartRef = React.createRef();
     }
 
+    parseFunction = memoizeWith(String, (funcString) => {
+        const context = {
+            d3,
+            dash_clientside,
+            ...customFunctions,
+            ...window.highChartsFunctions,
+        };
+        let parsedFunction;
+        if (typeof context[funcString] === 'function') {
+            // If funcString is a function name in context, use it directly
+            parsedFunction = context[funcString].bind(context);
+        } else {
+            // Create a new function with 'params' as an argument
+            parsedFunction = new Function('params', `
+                with (this) {
+                    ${funcString}
+                }
+            `).bind(context);
+        }
+        return parsedFunction;
+    });
+    applyConvertFunction = (obj) => {
+        const traverseAndConvert = (obj) => {
+            if (typeof obj !== 'object' || obj === null) {
+                return obj;
+            }
+            return Object.keys(obj).reduce((acc, key) => {
+                if (key === 'function') {
+                    const parsedFunction = this.parseFunction(obj[key]);
+                    // Replace the entire object with the parsed function
+                    return parsedFunction;
+                } else {
+
+                    acc[key] = traverseAndConvert(obj[key]);
+                    return acc;
+                }
+            }, Array.isArray(obj) ? [] : {});
+        };
+
+        const result = traverseAndConvert(obj);
+        return result;
+    };
+
     buildArray(arr1, arr2) {
         if (arr1) {
             if (!arr1.includes(arr2)) {
@@ -65,6 +123,7 @@ export default class HighChart extends Component {
         }
         return [JSON.parse(JSON.stringify(arr2))];
     }
+
     componentDidMount() {
         const {id} = this.props;
         if (id) {
@@ -84,16 +143,17 @@ export default class HighChart extends Component {
 
     render() {
         const {id, className, constructorType, options} = this.props;
+        const convertedOptions = this.applyConvertFunction(options);
 
         return (<div id={id}
-                className={className}>
-                <HighchartsReact
-                    highcharts={window.Highcharts}
-                    options={options}
-                    constructorType={constructorType}
-                    ref={this.chartRef}
-                />
-            </div>);
+                     className={className}>
+            <HighchartsReact
+                highcharts={window.Highcharts}
+                options={convertedOptions}
+                constructorType={constructorType}
+                ref={this.chartRef}
+            />
+        </div>);
     }
 }
 
